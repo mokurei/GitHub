@@ -1,0 +1,35 @@
+;***** ウィンドウをウィンドウを最大化  (sndobj02.hsp) *****
+
+	#define WM_SYSCOMMAND    $00000112
+	#define SC_MAXIMIZE      $0000F030
+
+	;▼ウィンドウを最大化
+	screen 0,ginfo(20),ginfo(21),0
+	sendmsg hwnd,WM_SYSCOMMAND,SC_MAXIMIZE,0
+
+
+
+/*
+【色々なウィンドウでmouseを使用する】
+HSPのウィンドウしかmouse命令は使用出来ませんが、
+他のウィンドウでもmouse命令でマウスの位置を取得するサンプルスクリプトです。
+ScreenToClientを使う方法
+*/
+
+#uselib "User32.dll"
+#cfunc WindowFromPoint "WindowFromPoint" int,int
+#func GetCursorPos "GetCursorPos" var
+#func ScreenToClient "ScreenToClient" int,var
+
+
+dim point,2
+repeat
+	GetCursorPos point
+	ScreenToClient WindowFromPoint(point(0),point(1)),point
+
+	pos 0,0
+	mes "hwnd : "+WindowFromPoint(point(0),point(1))
+	mes "x "+point(0)+",y "+point(1)
+	
+	redraw 1:wait 5:redraw 0:color 255,255,255:boxf:color
+loop
